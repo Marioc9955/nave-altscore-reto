@@ -42,6 +42,25 @@ function getFYByTwoPoints(x1: number, y1: number, x2: number, y2: number): (x: n
     return (y: number) => (y - b) / m;
 }
 
+function formatDecimal(num: number): string {
+    // Convierte el número a una cadena para manejar los decimales
+    const str = num.toString();
+
+    // Divide la cadena en parte entera y decimal
+    const parts = str.split('.');
+
+    if (parts.length === 1) {
+        // Si no hay decimales, añade .00
+        return num.toFixed(2);
+    } else {
+        // Obtiene la parte decimal y limita a un máximo de 5 dígitos
+        const decimalPart = parts[1].substring(0, 5);
+        // Asegura al menos 2 dígitos, rellenando con ceros si es necesario
+        const formattedDecimal = decimalPart.padEnd(2, '0').substring(0, 5);
+        return `${parts[0]}.${formattedDecimal}`;
+    }
+}
+
 function getPhaseChangeData(pressure: number): Record<string, number> {
     const specific_volume_liquid =
         getFYByTwoPoints(0.0035, 10, 0.00105, 0.05)(pressure);
@@ -49,8 +68,8 @@ function getPhaseChangeData(pressure: number): Record<string, number> {
         getFYByTwoPoints(0.0035, 10, 30, 0.05)(pressure);
 
     return {
-        specific_volume_liquid: parseFloat(specific_volume_liquid.toFixed(5)),
-        specific_volume_vapor: parseFloat(specific_volume_vapor.toFixed(5)),
+        specific_volume_liquid: parseFloat(formatDecimal(specific_volume_liquid)),
+        specific_volume_vapor: parseFloat(formatDecimal(specific_volume_vapor)),
     };
 }
 

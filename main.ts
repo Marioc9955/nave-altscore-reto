@@ -42,10 +42,6 @@ function getFYByTwoPoints(x1: number, y1: number, x2: number, y2: number): (x: n
     return (y: number) => (y - b) / m;
 }
 
-function roundToPrecision(value: number, precision: number = 5): number {
-    return Number(value.toFixed(precision));
-}
-
 function getPhaseChangeData(pressure: number): Record<string, number> {
     const specific_volume_liquid =
         getFYByTwoPoints(0.0035, 10, 0.00105, 0.05)(pressure);
@@ -53,8 +49,8 @@ function getPhaseChangeData(pressure: number): Record<string, number> {
         getFYByTwoPoints(0.0035, 10, 30, 0.05)(pressure);
 
     return {
-        specific_volume_liquid: roundToPrecision(specific_volume_liquid),
-        specific_volume_vapor: roundToPrecision(specific_volume_vapor),
+        specific_volume_liquid: parseFloat(specific_volume_liquid.toFixed(5)),
+        specific_volume_vapor: parseFloat(specific_volume_vapor.toFixed(5)),
     };
 }
 
